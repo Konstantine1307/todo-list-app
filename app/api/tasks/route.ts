@@ -1,4 +1,6 @@
+import { getServerSession } from 'next-auth';
 import { NextResponse } from 'next/server';
+import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import { MongoClient } from 'mongodb';
 
 const uri = process.env.MONGODB_URI;
@@ -7,7 +9,11 @@ if (!uri) {
 }
 const client = new MongoClient(uri);
 
-export async function GET() {
+export async function GET(req: Request, res: NextResponse) {
+  const session = await getServerSession(authOptions);
+  if (!session) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
   try {
     await client.connect();
     const db = client.db('todoapp');
@@ -29,11 +35,16 @@ export async function GET() {
       { status: 500 }
     );
   } finally {
-    await client.close();
+    // Don't close the client connection here
+    // client.close();
   }
 }
 
 export async function POST(request: Request) {
+  const session = await getServerSession(authOptions);
+  if (!session) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
   try {
     const task = await request.json();
     await client.connect();
