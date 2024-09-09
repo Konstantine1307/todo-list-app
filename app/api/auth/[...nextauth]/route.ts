@@ -3,8 +3,6 @@ import GithubProvider from 'next-auth/providers/github';
 import { MongoDBAdapter } from '@next-auth/mongodb-adapter';
 import { default as clientPromise } from '@/lib/mongodb';
 
-
-
 declare module 'next-auth' {
   interface Session {
     user?: {
@@ -31,6 +29,9 @@ export const authOptions: AuthOptions = {
       }
       return session;
     },
+  },
+  pages: {
+    signIn: '/auth/signin',
   },
 };
 
