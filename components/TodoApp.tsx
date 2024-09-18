@@ -137,7 +137,7 @@ export default function TodoApp() {
   if (!session) {
     return (
       <div className='flex flex-col items-center justify-center'>
-        <h1 className='text-2xl mb-4'>
+        <h1 className='text-lg md:text-xl mb-4'>
           Please sign in to access your Todo List
         </h1>
         <Button  onClick={() => signIn()}>Sign in</Button>
